@@ -1,0 +1,27 @@
+.calculator-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+.display {
+  gap: 10px;
+}
+
+.display,
+.previous-operand,
+.current-operand {
+  border: 1px solid gray;
+  border-radius: 0.5rem;
+}
+
+.previous-operand,
+.current-operand {
+  height: 40px;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
