@@ -84,3 +84,7 @@ body {
 .number:hover {
   background-color: #4c9170;
 }
+
+.span-two {
+  grid-column: span 2;
+}
