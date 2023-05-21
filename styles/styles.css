@@ -53,22 +53,19 @@ body {
   border: 1px;
   border-radius: 1rem;
   color: #fff;
+  transition: all 0.2s ease-in-out;
 }
 
-.number:hover {
-  background-color: #4c9170;
-}
-
-.operator:hover {
-  background-color: #d05d3d;
-}
-
-.function:hover {
-  background-color: #fda517;
+.button:hover {
+  transform: scale(1.05);
 }
 
 .function {
   background-color: #fabd5b;
+}
+
+.function:hover {
+  background-color: #fda517;
 }
 
 .operator {
@@ -76,6 +73,14 @@ body {
   font-size: 2.5rem;
 }
 
+.operator:hover {
+  background-color: #d05d3d;
+}
+
 .number {
   background-color: #81b29a;
+}
+
+.number:hover {
+  background-color: #4c9170;
 }
