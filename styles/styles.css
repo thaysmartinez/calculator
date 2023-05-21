@@ -55,6 +55,18 @@ body {
   color: #fff;
 }
 
+.number:hover {
+  background-color: #4c9170;
+}
+
+.operator:hover {
+  background-color: #d05d3d;
+}
+
+.function:hover {
+  background-color: #fda517;
+}
+
 .function {
   background-color: #fabd5b;
 }
