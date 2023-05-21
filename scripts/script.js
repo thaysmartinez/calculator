@@ -13,3 +13,14 @@ const operate = (operand1, operator, operand2) => {
   if (operator === '*') return multiply(operand1, operand2);
   if (operator === '/') return divide(operand1, operand2);
 };
+
+// Create reference to elements
+const displayCurrentOperand = document.querySelector('.current-operand');
+const buttons = document.querySelectorAll('.button');
+
+// Update display
+displayCurrentOperand.textContent = buttons.forEach(button =>
+  button.addEventListener('click', () => {
+    displayCurrentOperand.textContent = button.textContent;
+  })
+);
