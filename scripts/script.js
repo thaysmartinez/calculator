@@ -15,12 +15,25 @@ const operate = (operand1, operator, operand2) => {
 };
 
 // Create reference to elements
-const displayCurrentOperand = document.querySelector('.current-operand');
+const currentOperand = document.querySelector('.current-operand');
 const buttons = document.querySelectorAll('.button');
 
-// Update display
-displayCurrentOperand.textContent = buttons.forEach(button =>
-  button.addEventListener('click', () => {
-    displayCurrentOperand.textContent = button.textContent;
-  })
-);
+// Store button click events in array
+function storeOperation() {
+  let numbersArr = [];
+
+  buttons.forEach(button =>
+    button.addEventListener('click', () => numbersArr.push(button.textContent))
+  );
+  return numbersArr;
+}
+
+// Test if function works
+let myArr = storeOperation();
+
+// buttons.forEach(button =>
+//   button.addEventListener(
+//     'click',
+//     () => (currentOperand.textContent = button.textContent)
+//   )
+// );
