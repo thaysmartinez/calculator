@@ -16,24 +16,25 @@ const operate = (operand1, operator, operand2) => {
 
 // Create reference to elements
 const currentOperand = document.querySelector('.current-operand');
-const buttons = document.querySelectorAll('.button');
+const numbers = document.querySelectorAll('.number');
 
 // Store button click events in array
-function storeOperation() {
+const storeOperation = () => {
   let numbersArr = [];
-
-  buttons.forEach(button =>
-    button.addEventListener('click', () => numbersArr.push(button.textContent))
+  numbers.forEach(number =>
+    number.addEventListener('click', () => numbersArr.push(number.textContent))
   );
   return numbersArr;
-}
+};
+
+const populateDisplay = () => {
+  numbers.forEach(number =>
+    number.addEventListener('click', () => {
+      currentOperand.textContent += number.textContent;
+    })
+  );
+};
 
 // Test if function works
 let myArr = storeOperation();
-
-// buttons.forEach(button =>
-//   button.addEventListener(
-//     'click',
-//     () => (currentOperand.textContent = button.textContent)
-//   )
-// );
+populateDisplay();
