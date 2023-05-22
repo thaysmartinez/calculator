@@ -14,8 +14,8 @@ body {
   background-color: #3d405b;
   padding: 1.3rem;
   border-radius: 1.5rem;
-  width: 500px;
-  height: 700px;
+  width: 400px;
+  height: 600px;
 }
 
 .display {
@@ -36,10 +36,10 @@ body {
 }
 
 .previous-operand {
-  font-style: italic;
+  font-weight: 400;
 }
 
-.current-operand {
+.result {
   font-size: 3rem;
 }
 
@@ -60,11 +60,11 @@ body {
   transform: scale(1.05);
 }
 
-.function {
+.function-btn {
   background-color: #fabd5b;
 }
 
-.function:hover {
+.function-btn:hover {
   background-color: #fda517;
 }
 
@@ -87,4 +87,9 @@ body {
 
 .span-two {
   grid-column: span 2;
+  background-color: #51cae2;
+}
+
+.span-two:hover {
+  background-color: #02a9ca;
 }
