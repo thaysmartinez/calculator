@@ -2,7 +2,7 @@
 const add = (a, b) => a + b;
 const subtract = (a, b) => a - b;
 const multiply = (a, b) => a * b;
-const divide = (a, b) => a / b;
+const divide = (a, b) => (b === 0 ? 'error: division by 0' : a / b);
 const percent = operand => operand / 100;
 
 const operate = (operand1, operator, operand2) => {
