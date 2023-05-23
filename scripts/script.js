@@ -8,8 +8,8 @@ const percent = operand => operand / 100;
 const operate = (operand1, operator, operand2) => {
   if (operator === '+') return add(operand1, operand2);
   if (operator === '-') return subtract(operand1, operand2);
-  if (operator === '*') return multiply(operand1, operand2);
-  if (operator === '/') return divide(operand1, operand2);
+  if (operator === 'x') return multiply(operand1, operand2);
+  if (operator === '÷') return divide(operand1, operand2);
 };
 
 // Create reference to elements
