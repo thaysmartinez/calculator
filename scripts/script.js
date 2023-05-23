@@ -1,3 +1,4 @@
+// Define operations
 const add = (a, b) => a + b;
 const subtract = (a, b) => a - b;
 const multiply = (a, b) => a * b;
@@ -15,7 +16,7 @@ const operate = (operand1, operator, operand2) => {
 const display = document.querySelector('.display-operation');
 const numbers = document.querySelectorAll('.number');
 const operators = document.querySelectorAll('.operator');
-const equalSign = document.querySelector('#equal');
+const equalButton = document.querySelector('#equal');
 
 // Populate display
 const populateDisplay = () => {
@@ -26,12 +27,13 @@ const populateDisplay = () => {
   );
 };
 
-// Store number click events in variable
+// Save operands and operator into variables
 let operand = '';
-let firstOperand = null;
-let secondOperand = null;
+let operand1 = null;
+let operand2 = null;
+let operator = null;
 
-// Save outcome of click event into a variable
+// Hold user input
 numbers.forEach(number =>
   number.addEventListener('click', () => {
     operand += number.innerText;
@@ -39,30 +41,38 @@ numbers.forEach(number =>
   })
 );
 
-// Save first operand value after user clicks on an operator
+// Save first user input into variable
 operators.forEach(operator =>
   operator.addEventListener('click', () => {
-    firstOperand = operand;
+    operand1 = operand;
     operand = '';
   })
 );
 
-// Save second operand value after user clicks on the equal sign
-equalSign.addEventListener('click', () => {
-  secondOperand = operand;
-  operand = ''; // Reset variable for the next number input
+// Save second user input into variable
+equalButton.addEventListener('click', () => {
+  operand2 = operand;
+  operand = '';
 });
 
-// Store operator in variable
-let operator = '';
+// Save operator into variable
 operators.forEach(op =>
-  op.addEventListener('click', e => {
-    operator = e.target.innerText;
+  op.addEventListener('click', () => {
+    operator = op.innerText;
   })
 );
 
 // Call operate function when user clicks on the equal sign
+equalButton.addEventListener('click', () => {
+  if (operand1 !== null && operand2 !== null && operator !== null) {
+    const result = operate(operand1, operator, operand2);
+    console.log(`Result: ${result}`);
+    operand1 = null;
+    operand2 = null;
+    operator = null;
+  } else {
+    console.log('Invalid calculation');
+  }
+});
 
 populateDisplay();
-
-// Store first number when operator is pressed
