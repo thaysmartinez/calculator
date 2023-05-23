@@ -19,10 +19,11 @@ const operators = document.querySelectorAll('.operator');
 const equalButton = document.querySelector('#equal');
 
 // Populate display
+display.textContent = 0;
 const populateDisplay = () => {
   numbers.forEach(number =>
     number.addEventListener('click', () => {
-      display.textContent += number.textContent;
+      display.textContent = operand;
     })
   );
 };
@@ -67,6 +68,8 @@ equalButton.addEventListener('click', () => {
   if (operand1 !== null && operand2 !== null && operator !== null) {
     const result = operate(operand1, operator, operand2);
     console.log(`Result: ${result}`);
+    display.textContent = '';
+    display.textContent = result;
     operand1 = null;
     operand2 = null;
     operator = null;
