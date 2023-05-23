@@ -1,5 +1,5 @@
 body {
-  background-color: #f2cc8f;
+  background-color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -22,15 +22,15 @@ body {
   display: grid;
   grid-template-rows: 1fr;
   border-radius: 1rem;
-  background-color: #f4f1de;
+  background-color: rgb(235, 226, 226);
   color: #3d405b;
   text-align: right;
   padding: 0.5rem;
 }
 
 .display-operation {
-  padding: 0.5rem 0.5rem;
-  font-size: 3rem;
+  padding: 1.2rem 0.5rem;
+  font-size: 2rem;
 }
 
 .display,
