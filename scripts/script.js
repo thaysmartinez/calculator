@@ -3,6 +3,7 @@ const display = document.querySelector('.display-operation');
 const numbers = document.querySelectorAll('.number');
 const operators = document.querySelectorAll('.operator');
 const equalButton = document.querySelector('#equal');
+const allClear = document.querySelector('#ac');
 
 // Define operations
 const add = (a, b) => a + b;
@@ -48,6 +49,13 @@ const clearMemory = () => {
   result = [];
 };
 
+const clearAll = () => {
+  clearMemory();
+  display.textContent = 0;
+};
+
+allClear.addEventListener('click', clearAll);
+
 // Hold user input
 numbers.forEach(number =>
   number.addEventListener('click', () => {
@@ -80,7 +88,6 @@ operators.forEach(operatorBtn =>
     } else {
       operand2 = operands[0];
       operatorSign = operator[operator.length - 2];
-      console.log(operatorSign);
       result.unshift(operate(result[0], operatorSign, operand2));
       operand1 = result[0];
       display.textContent = operand1;
@@ -90,18 +97,14 @@ operators.forEach(operatorBtn =>
 
 // Call operate function when user clicks on the equal sign
 equalButton.addEventListener('click', () => {
-  if (operand1 !== null && operand2 !== null && operator !== null) {
-    operands.unshift(Number(digits));
-    operand2 = operands[0];
-    let total = operate(operand1, operatorSign, operand2);
-    total = Math.round(total * ROUND) / ROUND;
-    console.log(`total: ${total}`);
-    display.textContent = '';
-    display.textContent = total;
-    clearMemory();
-  } else {
-    display.textContent = 'Invalid calculation';
-  }
+  operands.unshift(Number(digits));
+  operatorSign = operator[operator.length - 1];
+  operand2 = operands[0];
+  let total = operate(operand1, operatorSign, operand2);
+  total = Math.round(total * ROUND) / ROUND;
+  console.log(`total: ${total}`);
+  display.textContent = total;
+  clearMemory();
 });
 
 populateDisplay();
