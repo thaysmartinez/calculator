@@ -2,6 +2,7 @@
 const display = document.querySelector('.display-operation');
 const numbers = document.querySelectorAll('.number');
 const operators = document.querySelectorAll('.operator');
+const decimal = document.querySelector('#decimal');
 const equalButton = document.querySelector('#equal');
 const allClear = document.querySelector('#ac');
 
@@ -60,6 +61,9 @@ allClear.addEventListener('click', clearAll);
 numbers.forEach(number =>
   number.addEventListener('click', () => {
     digits += number.innerText;
+    digits.includes('.')
+      ? (decimal.disabled = true)
+      : (decimal.disabled = false);
   })
 );
 
@@ -102,9 +106,10 @@ equalButton.addEventListener('click', () => {
   operand2 = operands[0];
   let total = operate(operand1, operatorSign, operand2);
   total = Math.round(total * ROUND) / ROUND;
-  console.log(`total: ${total}`);
   display.textContent = total;
-  clearMemory();
+  //   clearMemory();
 });
 
 populateDisplay();
+
+// Fix issue when user only clicks on operator buttons
