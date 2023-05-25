@@ -21,25 +21,6 @@ const operate = (operand1, operator, operand2) => {
   if (operator === '÷') return divide(operand1, operand2);
 };
 
-// Populate display
-display.textContent = 0;
-const populateDisplay = () => {
-  numbers.forEach(number =>
-    number.addEventListener('click', () => {
-      display.textContent = digits;
-    })
-  );
-};
-
-// Create variables and arrays to hold operands and operators
-let digits = '';
-let operands = [];
-let operand1 = null;
-let operand2 = null;
-let operator = [];
-let operatorSign = '';
-let result = [];
-
 const clearMemory = () => {
   digits = '';
   operands = [];
@@ -55,6 +36,25 @@ const clearAll = () => {
   display.textContent = 0;
 };
 
+// Create variables and arrays to hold operands and operators
+let digits = '';
+let operands = [];
+let operand1 = null;
+let operand2 = null;
+let operator = [];
+let operatorSign = '';
+let result = [];
+
+// Populate display
+display.textContent = 0;
+const populateDisplay = () => {
+  numbers.forEach(number =>
+    number.addEventListener('click', () => {
+      display.textContent = digits;
+    })
+  );
+};
+
 allClear.addEventListener('click', clearAll);
 
 // Hold user input
@@ -64,8 +64,13 @@ numbers.forEach(number =>
     digits.includes('.')
       ? (decimal.disabled = true)
       : (decimal.disabled = false);
+    if (digits.startsWith('.')) {
+      digits = '0' + digits;
+    }
   })
 );
+
+decimal.addEventListener('click', () => console.log('decimal clicked'));
 
 // Save operators into array
 operators.forEach(operatorBtn =>
@@ -77,6 +82,7 @@ operators.forEach(operatorBtn =>
 // Save operands into array
 operators.forEach(operatorBtn =>
   operatorBtn.addEventListener('click', () => {
+    decimal.disabled = false;
     operands.unshift(Number(digits));
     digits = '';
   })
@@ -113,3 +119,5 @@ equalButton.addEventListener('click', () => {
 populateDisplay();
 
 // Fix issue when user only clicks on operator buttons
+// display 0 before decimal if user starts operation with decimaml
+// Implement percent operation
