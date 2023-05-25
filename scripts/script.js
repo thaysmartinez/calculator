@@ -24,19 +24,29 @@ display.textContent = 0;
 const populateDisplay = () => {
   numbers.forEach(number =>
     number.addEventListener('click', () => {
-      display.textContent = num;
+      display.textContent = digits;
     })
   );
 };
 
-// Save operands and operator into variables
+// Create variables and arrays to hold operands and operators
 let digits = '';
-let num = '';
 let operands = [];
 let operand1 = null;
 let operand2 = null;
 let operator = [];
+let operatorSign = '';
 let result = [];
+
+const clearMemory = () => {
+  digits = '';
+  operands = [];
+  operand1 = null;
+  operand2 = null;
+  operator = [];
+  operatorSign = '';
+  result = [];
+};
 
 // Hold user input
 numbers.forEach(number =>
@@ -45,7 +55,7 @@ numbers.forEach(number =>
   })
 );
 
-// Save operator into variable
+// Save operators into array
 operators.forEach(operatorBtn =>
   operatorBtn.addEventListener('click', () => {
     operator.push(operatorBtn.innerText);
@@ -66,47 +76,31 @@ operators.forEach(operatorBtn =>
     if (result.length === 0) {
       operand1 = operands[0];
       result.unshift(operands[0]);
-      console.log('operands:', operands);
-      console.log('operand1:', operand1);
-      console.log('operand2:', operand2);
-      console.log('operator:', operator);
-      console.log('result:', result);
-      console.log('----------------');
+      display.textContent = operand1;
     } else {
       operand2 = operands[0];
-      let operatorSign = operator[operator.length - 2];
+      operatorSign = operator[operator.length - 2];
       console.log(operatorSign);
       result.unshift(operate(result[0], operatorSign, operand2));
-      console.log('operator length:', operator.length);
-      console.log('operands:', operands);
-      console.log('operand1:', operand1);
-      console.log('operand2:', operand2);
-      console.log('operator:', operator);
-      console.log('result:', result);
-      console.log('----------------');
+      operand1 = result[0];
+      display.textContent = operand1;
     }
   })
 );
 
-// Save second user input into variable
-equalButton.addEventListener('click', () => {
-  operand2 = num;
-  num = '';
-});
-
 // Call operate function when user clicks on the equal sign
 equalButton.addEventListener('click', () => {
   if (operand1 !== null && operand2 !== null && operator !== null) {
-    result = operate(operand1, operator, operand2);
-    result = Math.round(result * ROUND) / ROUND;
-    console.log(`Result: ${result}`);
+    operands.unshift(Number(digits));
+    operand2 = operands[0];
+    let total = operate(operand1, operatorSign, operand2);
+    total = Math.round(total * ROUND) / ROUND;
+    console.log(`total: ${total}`);
     display.textContent = '';
-    display.textContent = result;
-    operand1 = null;
-    operand2 = null;
-    operator = null;
+    display.textContent = total;
+    clearMemory();
   } else {
-    console.log('Invalid calculation');
+    display.textContent = 'Invalid calculation';
   }
 });
 
