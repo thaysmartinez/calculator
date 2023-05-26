@@ -30,7 +30,7 @@ const clearMemory = () => {
   operand2;
   operands = [];
   operators = [];
-  results = [];
+  //   results = [];
   clickEvent = 0;
 };
 
@@ -98,19 +98,27 @@ operatorButtons.forEach(operatorButton => {
     display.textContent = results[0];
     clickEvent++;
 
-    console.log('operand1:', operand1);
-    console.log('operand2:', operand2);
-    console.log('operator:', operator);
-    console.log('results:', results);
+    console.log('operand1', operand1);
+    console.log('operand2', operand2);
+    console.log('operator', operator);
+    console.log('results', results);
   });
 });
 
 equalButton.addEventListener('click', () => {
-  delButton.disabled = true;
   operand1 = results[0];
   operator = operators[0];
   operand2 = Number(digitString);
   results.unshift(operate(operand1, operator, operand2));
-  display.textContent = Math.round(results[0] * ROUND) / ROUND;
+
+  operand1 === undefined || operand2 === undefined
+    ? (display.textContent = '0')
+    : (display.textContent = Math.round(results[0] * ROUND) / ROUND);
+
   clearMemory();
+
+  console.log('operand1', operand1);
+  console.log('operand2', operand2);
+  console.log('operator', operator);
+  console.log('results', results);
 });
