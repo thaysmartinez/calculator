@@ -30,7 +30,7 @@ const clearMemory = () => {
   operand2;
   operands = [];
   operators = [];
-  //   results = [];
+  results = [];
   clickEvent = 0;
 };
 
@@ -43,8 +43,6 @@ let results = [];
 let operand;
 let operator;
 let clickEvent = 0;
-
-// Update display
 
 delButton.addEventListener('click', () => {
   digitString = display.innerText.slice(0, -1);
@@ -83,25 +81,22 @@ operatorButtons.forEach(operatorButton => {
     digitString = '';
 
     if (clickEvent === 0) {
+      console.log('if control flow');
       operand1 = operands[0];
       operator = operators[0];
       operand2 = 0;
       results.unshift(Math.round(operand1 * ROUND) / ROUND);
     } else {
+      console.log('else control flow');
       operand1 = results[0];
       operator = operators[1];
-      operand2 = operands[operands.length - 1];
+      operand2 = Number(digitString);
       results.unshift(
         Math.round(operate(operand1, operator, operand2) * ROUND) / ROUND
       );
     }
     display.textContent = results[0];
     clickEvent++;
-
-    console.log('operand1', operand1);
-    console.log('operand2', operand2);
-    console.log('operator', operator);
-    console.log('results', results);
   });
 });
 
@@ -114,11 +109,4 @@ equalButton.addEventListener('click', () => {
   operand1 === undefined || operand2 === undefined
     ? (display.textContent = '0')
     : (display.textContent = Math.round(results[0] * ROUND) / ROUND);
-
-  clearMemory();
-
-  console.log('operand1', operand1);
-  console.log('operand2', operand2);
-  console.log('operator', operator);
-  console.log('results', results);
 });
