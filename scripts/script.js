@@ -1,5 +1,6 @@
 // Create reference to elements
 const display = document.querySelector('.display-operation');
+const buttons = document.querySelectorAll('.buttons');
 const digitButtons = document.querySelectorAll('.number');
 const operatorButtons = document.querySelectorAll('.operator');
 const decimalButton = document.querySelector('#decimal');
@@ -31,7 +32,21 @@ const clearMemory = () => {
   operands = [];
   operators = [];
   results = [];
-  clickEvent = 0;
+  display.textContent = 0;
+};
+
+const delInput = () => {
+  digitString = display.innerText.slice(0, -1);
+  display.textContent = digitString;
+};
+
+const getPercent = () => {
+  digitString /= 100;
+  display.textContent = digitString;
+};
+
+const disableDecimal = () => {
+  decimalButton.disabled = true;
 };
 
 let digitString = '';
@@ -40,32 +55,19 @@ let operand2;
 let operands = [];
 let operators = [];
 let results = [];
+let userInput;
 let operand;
 let operator;
-let clickEvent = 0;
-
-delButton.addEventListener('click', () => {
-  digitString = display.innerText.slice(0, -1);
-  display.textContent = digitString;
-});
-
-allClearButton.addEventListener('click', () => {
-  display.textContent = 0;
-  clearMemory();
-});
-
-percentButton.addEventListener('click', () => {
-  digitString /= 100;
-  display.textContent = digitString;
-});
-
-decimalButton.addEventListener('click', () => {
-  decimalButton.disabled = true;
-});
-
 display.textContent = '0';
+
+allClearButton.addEventListener('click', clearMemory);
+delButton.addEventListener('click', delInput);
+percentButton.addEventListener('click', getPercent);
+decimalButton.addEventListener('click', disableDecimal);
+
 digitButtons.forEach(digitButton => {
   digitButton.addEventListener('click', () => {
+    userInput = digitButton.innerText;
     digitString += digitButton.innerText;
     digitString.startsWith('.')
       ? (display.textContent = digitString = '0.')
@@ -75,38 +77,55 @@ digitButtons.forEach(digitButton => {
 
 operatorButtons.forEach(operatorButton => {
   operatorButton.addEventListener('click', () => {
+    userInput = operatorButton.innerText;
     decimalButton.disabled = false;
-    operands.push(Number(digitString));
-    operators.unshift(operatorButton.innerText);
-    digitString = '';
 
-    if (clickEvent === 0) {
-      console.log('if control flow');
-      operand1 = operands[0];
-      operator = operators[0];
-      operand2 = 0;
-      results.unshift(Math.round(operand1 * ROUND) / ROUND);
+    operands.push(Number(digitString));
+
+    lastOperand = operands.length - 1;
+
+    operators.unshift(operatorButton.innerText);
+
+    if (results.length === 0) {
+      operand1 = Number(digitString);
+      results.unshift(operand1);
     } else {
-      console.log('else control flow');
       operand1 = results[0];
       operator = operators[1];
-      operand2 = Number(digitString);
-      results.unshift(
-        Math.round(operate(operand1, operator, operand2) * ROUND) / ROUND
-      );
+      operand2 = operands[lastOperand];
+
+      results.unshift(operate(operand1, operator, operand2));
+      console.log('results:', results);
     }
+
     display.textContent = results[0];
-    clickEvent++;
+    digitString = '';
   });
 });
 
 equalButton.addEventListener('click', () => {
-  operand1 = results[0];
-  operator = operators[0];
-  operand2 = Number(digitString);
-  results.unshift(operate(operand1, operator, operand2));
+  userInput = equalButton.innerText;
+  operands.push(Number(digitString));
+  console.log('operands:', operands);
 
-  operand1 === undefined || operand2 === undefined
-    ? (display.textContent = '0')
-    : (display.textContent = Math.round(results[0] * ROUND) / ROUND);
+  operand1 = results[0];
+  console.log('operand1:', operand1);
+
+  operator = operators[0];
+  console.log('operator:', operator);
+
+  operand2 = Number(digitString);
+  console.log('operand2:', operand2);
+
+  results.unshift(operate(operand1, operator, operand2));
+  console.log('results:', results);
+
+  display.textContent = results[0];
+
+  digitString = '';
+
+  operands = [];
+  //   operators = [];
+  //   results = [];
+  //   operatorClick = 0;
 });
