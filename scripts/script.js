@@ -7,7 +7,6 @@ const decimalButton = document.querySelector('#decimal');
 const equalButton = document.querySelector('#equal');
 const allClearButton = document.querySelector('#ac');
 const delButton = document.querySelector('#del');
-const percentButton = document.querySelector('#percent');
 
 // Define operations
 const add = (a, b) => a + b;
@@ -40,11 +39,6 @@ const delInput = () => {
   display.textContent = digitString;
 };
 
-const getPercent = () => {
-  digitString /= 100;
-  display.textContent = digitString;
-};
-
 const disableDecimal = () => {
   decimalButton.disabled = true;
 };
@@ -62,7 +56,6 @@ display.textContent = '0';
 
 allClearButton.addEventListener('click', clearMemory);
 delButton.addEventListener('click', delInput);
-percentButton.addEventListener('click', getPercent);
 decimalButton.addEventListener('click', disableDecimal);
 
 digitButtons.forEach(digitButton => {
@@ -81,9 +74,7 @@ operatorButtons.forEach(operatorButton => {
     decimalButton.disabled = false;
 
     operands.push(Number(digitString));
-
     lastOperand = operands.length - 1;
-
     operators.unshift(operatorButton.innerText);
 
     if (results.length === 0) {
@@ -93,12 +84,16 @@ operatorButtons.forEach(operatorButton => {
       operand1 = results[0];
       operator = operators[1];
       operand2 = operands[lastOperand];
-
       results.unshift(operate(operand1, operator, operand2));
-      console.log('results:', results);
     }
 
     display.textContent = results[0];
+
+    console.log('operand1', operand1);
+    console.log('operand2', operand2);
+    console.log('operators', operators);
+    console.log('results', results);
+
     digitString = '';
   });
 });
@@ -106,26 +101,13 @@ operatorButtons.forEach(operatorButton => {
 equalButton.addEventListener('click', () => {
   userInput = equalButton.innerText;
   operands.push(Number(digitString));
-  console.log('operands:', operands);
 
   operand1 = results[0];
-  console.log('operand1:', operand1);
-
   operator = operators[0];
-  console.log('operator:', operator);
-
   operand2 = Number(digitString);
-  console.log('operand2:', operand2);
 
   results.unshift(operate(operand1, operator, operand2));
-  console.log('results:', results);
 
   display.textContent = results[0];
-
   digitString = '';
-
-  operands = [];
-  //   operators = [];
-  //   results = [];
-  //   operatorClick = 0;
 });
