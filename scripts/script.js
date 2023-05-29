@@ -1,6 +1,5 @@
 // Create reference to elements
 const display = document.querySelector('.display-operation');
-const buttons = document.querySelectorAll('.buttons');
 const digitButtons = document.querySelectorAll('.number');
 const operatorButtons = document.querySelectorAll('.operator');
 const decimalButton = document.querySelector('#decimal');
@@ -13,8 +12,6 @@ const add = (a, b) => a + b;
 const subtract = (a, b) => a - b;
 const multiply = (a, b) => a * b;
 const divide = (a, b) => (b === 0 ? 'Error' : a / b);
-const percent = operand => operand / 100;
-const ROUND = 10000000000;
 
 const operate = (operand1, operator, operand2) => {
   if (operator === '+') return add(operand1, operand2);
@@ -52,6 +49,8 @@ let results = [];
 let userInput;
 let operand;
 let operator;
+const ROUNDED = 100000000;
+
 display.textContent = '0';
 
 allClearButton.addEventListener('click', clearMemory);
@@ -60,8 +59,8 @@ decimalButton.addEventListener('click', disableDecimal);
 
 digitButtons.forEach(digitButton => {
   digitButton.addEventListener('click', () => {
-    userInput = digitButton.innerText;
     digitString += digitButton.innerText;
+    // Display leading zero when decimal is pressed first
     digitString.startsWith('.')
       ? (display.textContent = digitString = '0.')
       : (display.textContent = digitString);
@@ -70,16 +69,18 @@ digitButtons.forEach(digitButton => {
 
 operatorButtons.forEach(operatorButton => {
   operatorButton.addEventListener('click', () => {
-    userInput = operatorButton.innerText;
     decimalButton.disabled = false;
 
+    // Store user input
     operands.push(Number(digitString));
     lastOperand = operands.length - 1;
     operators.unshift(operatorButton.innerText);
 
+    // Store first operand
     if (results.length === 0) {
       operand1 = Number(digitString);
       results.unshift(operand1);
+      // Store second operand and operate
     } else {
       operand1 = results[0];
       operator = operators[1];
@@ -87,19 +88,12 @@ operatorButtons.forEach(operatorButton => {
       results.unshift(operate(operand1, operator, operand2));
     }
 
-    display.textContent = results[0];
-
-    console.log('operand1', operand1);
-    console.log('operand2', operand2);
-    console.log('operators', operators);
-    console.log('results', results);
-
+    display.textContent = Math.round(results[0] * ROUNDED) / ROUNDED;
     digitString = '';
   });
 });
 
 equalButton.addEventListener('click', () => {
-  userInput = equalButton.innerText;
   operands.push(Number(digitString));
 
   operand1 = results[0];
@@ -108,6 +102,6 @@ equalButton.addEventListener('click', () => {
 
   results.unshift(operate(operand1, operator, operand2));
 
-  display.textContent = results[0];
+  display.textContent = Math.round(results[0] * ROUNDED) / ROUNDED;
   digitString = '';
 });
