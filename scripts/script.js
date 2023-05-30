@@ -43,6 +43,20 @@ const disableDecimal = () => {
   decimalButton.disabled = true;
 };
 
+const truncateNumber = value => {
+  // check if the value has a decimal point
+  const hasDecimal = value.includes('.');
+
+  // Check if value is longer than 10 characters (including the decimal point)
+  // Truncate the value to 10 characters
+  if (value.length > 12 && !hasDecimal) value = value.slice(0, 12);
+
+  // Truncate the value to 11 characters (including the decimal point)
+  if (value.length > 13 && hasDecimal) value = value.slice(0, 13);
+
+  display.textContent = value;
+};
+
 let digitString = '';
 let operands = [];
 let operators = [];
@@ -60,11 +74,14 @@ digitButtons.forEach(digitButton => {
 
     // append digits to form operands
     digitString += digitButton.innerText;
+    // digitString = truncateNumber(digitString);
 
     // show leading zero if input starts with decimal point
     digitString.startsWith('.')
-      ? (display.textContent = digitString = '0.')
-      : (display.textContent = digitString);
+      ? (digitString = '0' + digitString)
+      : (digitString = digitString);
+
+    truncateNumber(digitString);
   });
 });
 
@@ -94,7 +111,8 @@ equalButton.addEventListener('click', () => {
     operators[operators.length - 1],
     operands[operands.length - 1]
   );
-  display.innerText = result;
+  //   display.textContent = result;
+  truncateNumber(result.toString());
 
   // store result
   operands.push(Number(display.innerText));
@@ -105,20 +123,3 @@ equalButton.addEventListener('click', () => {
   // disable delete button after equals is pressed
   delButton.disabled = true;
 });
-
-// function updateDisplay(value) {
-//   // check if the value has a decimal point
-//   const hasDecimal = value.includes('.');
-
-//   // Check if value is longer than 10 characters (including the decimal point)
-//   if (value.length > 10 && !hasDecimal) {
-//     // Truncate the value to 10 characters
-//     value = value.slice(0, 10);
-//   }
-//   if (value.length > 11 && hasDecimal) {
-//     // Truncate the value to 11 characters (including the decimal point)
-//     value = value.slice(0, 11);
-//   }
-// }
-
-// updateDisplay(display.innerText);
