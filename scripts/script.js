@@ -1,5 +1,6 @@
 // Create reference to elements
 const display = document.querySelector('.display-operation');
+const buttons = document.querySelectorAll('.buttons');
 const digitButtons = document.querySelectorAll('.number');
 const operatorButtons = document.querySelectorAll('.operator');
 const decimalButton = document.querySelector('#decimal');
@@ -12,6 +13,8 @@ const add = (a, b) => a + b;
 const subtract = (a, b) => a - b;
 const multiply = (a, b) => a * b;
 const divide = (a, b) => (b === 0 ? 'Error' : a / b);
+const percent = operand => operand / 100;
+const ROUND = 10000000000;
 
 const operate = (operand1, operator, operand2) => {
   if (operator === '+') return add(operand1, operand2);
@@ -22,18 +25,18 @@ const operate = (operand1, operator, operand2) => {
 
 const clearMemory = () => {
   digitString = '';
-  operand1;
-  operator;
-  operand2;
   operands = [];
   operators = [];
-  results = [];
   display.textContent = 0;
 };
 
 const delInput = () => {
   digitString = display.innerText.slice(0, -1);
-  display.textContent = digitString;
+
+  // display 0 if all numbers are deleted
+  digitString === ''
+    ? (display.textContent = '0')
+    : (display.textContent = digitString);
 };
 
 const disableDecimal = () => {
@@ -41,15 +44,8 @@ const disableDecimal = () => {
 };
 
 let digitString = '';
-let operand1;
-let operand2;
 let operands = [];
 let operators = [];
-let results = [];
-let userInput;
-let operand;
-let operator;
-const ROUNDED = 100000000;
 
 display.textContent = '0';
 
@@ -59,8 +55,13 @@ decimalButton.addEventListener('click', disableDecimal);
 
 digitButtons.forEach(digitButton => {
   digitButton.addEventListener('click', () => {
+    // enable delete button
+    delButton.disabled = false;
+
+    // append digits to form operands
     digitString += digitButton.innerText;
-    // Display leading zero when decimal is pressed first
+
+    // show leading zero if input starts with decimal point
     digitString.startsWith('.')
       ? (display.textContent = digitString = '0.')
       : (display.textContent = digitString);
@@ -69,39 +70,55 @@ digitButtons.forEach(digitButton => {
 
 operatorButtons.forEach(operatorButton => {
   operatorButton.addEventListener('click', () => {
+    // enable decimal button after operator click
     decimalButton.disabled = false;
 
-    // Store user input
-    operands.push(Number(digitString));
-    lastOperand = operands.length - 1;
-    operators.unshift(operatorButton.innerText);
-
-    // Store first operand
-    if (results.length === 0) {
-      operand1 = Number(digitString);
-      results.unshift(operand1);
-      // Store second operand and operate
-    } else {
-      operand1 = results[0];
-      operator = operators[1];
-      operand2 = operands[lastOperand];
-      results.unshift(operate(operand1, operator, operand2));
+    // do not store operand if no number was input into the calculator
+    if (digitString !== '') {
+      operands.push(Number(digitString));
     }
 
-    display.textContent = Math.round(results[0] * ROUNDED) / ROUNDED;
+    // store last operator entered
+    operators.push(operatorButton.innerText);
     digitString = '';
   });
 });
 
 equalButton.addEventListener('click', () => {
-  operands.push(Number(digitString));
+  // store last number input into calculator display
+  operands.push(Number(display.innerText));
 
-  operand1 = results[0];
-  operator = operators[0];
-  operand2 = Number(digitString);
+  // display result
+  let result = operate(
+    operands[operands.length - 2],
+    operators[operators.length - 1],
+    operands[operands.length - 1]
+  );
+  display.innerText = result;
 
-  results.unshift(operate(operand1, operator, operand2));
+  // store result
+  operands.push(Number(display.innerText));
 
-  display.textContent = Math.round(results[0] * ROUNDED) / ROUNDED;
+  // reset number input
   digitString = '';
+
+  // disable delete button after equals is pressed
+  delButton.disabled = true;
 });
+
+// function updateDisplay(value) {
+//   // check if the value has a decimal point
+//   const hasDecimal = value.includes('.');
+
+//   // Check if value is longer than 10 characters (including the decimal point)
+//   if (value.length > 10 && !hasDecimal) {
+//     // Truncate the value to 10 characters
+//     value = value.slice(0, 10);
+//   }
+//   if (value.length > 11 && hasDecimal) {
+//     // Truncate the value to 11 characters (including the decimal point)
+//     value = value.slice(0, 11);
+//   }
+// }
+
+// updateDisplay(display.innerText);
