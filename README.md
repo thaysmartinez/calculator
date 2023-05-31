@@ -2,7 +2,7 @@
 
 Calculator app developed using HTML, CSS and Vanilla JavaScript.
 
-[🔗 Live preview](https://thaysmartinez.github.io/calculator/)
+🔗 [Live preview](https://thaysmartinez.github.io/calculator/)
 
 ## Usage
 
