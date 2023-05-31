@@ -19,29 +19,11 @@ const ROUND = 10000000000;
 const operate = (operand1, operator, operand2) => {
   if (operator === '+') return add(operand1, operand2);
   if (operator === '-') return subtract(operand1, operand2);
-  if (operator === 'x') return multiply(operand1, operand2);
-  if (operator === '÷') return divide(operand1, operand2);
+  if (operator === 'x' || operator === '*') return multiply(operand1, operand2);
+  if (operator === '÷' || operator === '/') return divide(operand1, operand2);
 };
 
-const clearMemory = () => {
-  digitString = '';
-  operands = [];
-  operators = [];
-  display.textContent = 0;
-};
-
-const delInput = () => {
-  digitString = display.innerText.slice(0, -1);
-
-  // display 0 if all numbers are deleted
-  digitString === ''
-    ? (display.textContent = '0')
-    : (display.textContent = digitString);
-};
-
-const disableDecimal = () => {
-  decimalButton.disabled = true;
-};
+// Define support functions
 
 const truncateNumber = value => {
   // check if the value has a decimal point
@@ -49,10 +31,10 @@ const truncateNumber = value => {
 
   // Check if value is longer than 10 characters (including the decimal point)
   // Truncate the value to 10 characters
-  if (value.length > 12 && !hasDecimal) value = value.slice(0, 12);
+  if (value.length > 11 && !hasDecimal) value = value.slice(0, 11);
 
   // Truncate the value to 11 characters (including the decimal point)
-  if (value.length > 13 && hasDecimal) value = value.slice(0, 13);
+  if (value.length > 12 && hasDecimal) value = value.slice(0, 12);
 
   display.textContent = value;
 };
@@ -60,48 +42,104 @@ const truncateNumber = value => {
 let digitString = '';
 let operands = [];
 let operators = [];
-
+let decimalEntered = false;
 display.textContent = '0';
 
-allClearButton.addEventListener('click', clearMemory);
-delButton.addEventListener('click', delInput);
-decimalButton.addEventListener('click', disableDecimal);
-
+document.addEventListener('keydown', handleKeyDown);
+allClearButton.addEventListener('click', handleAllClearInput);
+delButton.addEventListener('click', handleDeleteInput);
+decimalButton.addEventListener('click', handleDecimalInput);
+equalButton.addEventListener('click', handleEqualsInput);
 digitButtons.forEach(digitButton => {
-  digitButton.addEventListener('click', () => {
-    // enable delete button
-    delButton.disabled = false;
-
-    // append digits to form operands
-    digitString += digitButton.innerText;
-    // digitString = truncateNumber(digitString);
-
-    // show leading zero if input starts with decimal point
-    digitString.startsWith('.')
-      ? (digitString = '0' + digitString)
-      : (digitString = digitString);
-
-    truncateNumber(digitString);
-  });
+  digitButton.addEventListener('click', () =>
+    handleDigitInput(digitButton.innerText)
+  );
+});
+operatorButtons.forEach(operatorButton => {
+  operatorButton.addEventListener('click', () =>
+    handleOperatorInput(operatorButton.innerText)
+  );
 });
 
-operatorButtons.forEach(operatorButton => {
-  operatorButton.addEventListener('click', () => {
-    // enable decimal button after operator click
-    decimalButton.disabled = false;
+function handleKeyDown(event) {
+  const key = event.key;
+  // event.preventDefault();
 
-    // do not store operand if no number was input into the calculator
-    if (digitString !== '') {
-      operands.push(Number(digitString));
+  if (/^[\d.]$/.test(key)) {
+    key === '.' ? handleDecimalInput() : handleDigitInput(key);
+    return;
+  }
+
+  // Process the key based on its value
+  switch (key) {
+    case '+':
+    case '-':
+    case '*':
+    case '/':
+      handleOperatorInput(key);
+      break;
+
+    case 'Enter':
+      handleEqualsInput();
+      break;
+
+    case 'Backspace':
+      handleDeleteInput();
+      break;
+
+    case 'Escape':
+      handleAllClearInput();
+      break;
+
+    default:
+      // Ignore other keys
+      break;
+  }
+}
+
+function handleDigitInput(digit) {
+  // enable delete button
+  delButton.disabled = false;
+
+  // append digits to form operands
+  if (!decimalEntered || digit !== '.') {
+    digitString += digit;
+    truncateNumber(digitString);
+  }
+}
+
+function handleDecimalInput() {
+  if (!decimalEntered) {
+    if (digitString.startsWith('.')) {
+      display.textContent = '0' + digitString;
+      digitString = display.textContent;
+    } else {
+      display.textContent += '.';
+      digitString = display.textContent;
     }
 
-    // store last operator entered
-    operators.push(operatorButton.innerText);
-    digitString = '';
-  });
-});
+    // display.textContent = digitString;
+    decimalEntered = true;
+    decimalButton.disabled = true;
+  }
+}
 
-equalButton.addEventListener('click', () => {
+function handleOperatorInput(operator) {
+  // enable decimal button after operator click
+  decimalButton.disabled = false;
+  decimalEntered = false;
+
+  // do not store operand if no number was input into the calculator
+  if (digitString !== '') {
+    operands.push(Number(digitString));
+  }
+
+  // store last operator entered
+  operators.push(operator);
+  digitString = '';
+}
+
+function handleEqualsInput() {
   // store last number input into calculator display
   operands.push(Number(display.innerText));
 
@@ -122,4 +160,26 @@ equalButton.addEventListener('click', () => {
 
   // disable delete button after equals is pressed
   delButton.disabled = true;
-});
+
+  // enable decimal
+  decimalEntered = false;
+  decimalButton.disabled = false;
+}
+
+function handleDeleteInput() {
+  digitString = display.innerText.slice(0, -1);
+
+  // display 0 if all numbers are deleted
+  digitString === ''
+    ? (display.textContent = '0')
+    : (display.textContent = digitString);
+}
+
+function handleAllClearInput() {
+  digitString = '';
+  operands = [];
+  operators = [];
+  decimalEntered = false;
+  decimalButton.disabled = false;
+  display.textContent = 0;
+}
