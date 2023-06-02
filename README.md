@@ -4,6 +4,8 @@ Calculator app developed using HTML, CSS and Vanilla JavaScript.
 
 🔗 [Live preview](https://thaysmartinez.github.io/calculator/)
 
+![alt text](./img/calculator_img.png)
+
 ## Usage
 
 Supports both keyboard and mouse inputs.
